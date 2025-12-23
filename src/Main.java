@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+
 import java.awt.*;
 
 public class Main {
@@ -215,19 +218,91 @@ public class Main {
         //---------------- TITLE ----------------
         JLabel title = new JLabel("Products Management");
         title.setFont(new Font("SansSerif", Font.BOLD, 28));
-        title.setBounds((screen.width / 2) - 200, 20, 400, 35);
+        title.setBounds((screen.width / 2) - 200, 5, 400, 35);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         productsPanel.add(title);
 
         // ---------------- BACK BUTTON ----------------
         JButton backBtn = new JButton("Back");
-        backBtn.setBounds(40, 30, 100, 35);
+        backBtn.setBounds(40, 80, 100, 35);
         backBtn.addActionListener(e -> {
             productsPanel.setVisible(false);
             ownerPanel.setVisible(true);
         });
         productsPanel.add(backBtn);
 
+        // ---------------- HEADER COMPONENTS ----------------
+        JTextField searchField = new JTextField();
+        searchField.setBounds((screen.width - 775), 80, 250, 35);
+        productsPanel.add(searchField);
+
+        JButton searchBtn = new JButton("Search");
+        searchBtn.setBounds((screen.width - 525), 80, 100, 35);
+        productsPanel.add(searchBtn);
+
+        String[] sortStrings = {"Name", "Category", "Price"};
+        JComboBox<String> filterCombo = new JComboBox<>(sortStrings);
+        filterCombo.setBounds((screen.width - 400), 80, 150, 35);
+        productsPanel.add(filterCombo);
+
+        JButton addProductBtn = new JButton("Add Product");
+        addProductBtn.setBounds((screen.width - 225), 80, 150, 35);
+        productsPanel.add(addProductBtn);
+
+        // ---------------- PRODUCTS TABLE ----------------
+        
+        String[] columnNames = {"Name", "Category", "Buy Price", "Sell Price", "Active", "Actions"};
+        JTable productsTable = new JTable(new Object[][]{
+                {"Product A", "Category 1", "$10.00", "$15.00", "Yes", "Edit/Delete"},
+                {"Product B", "Category 2", "$15.00", "$20.00", "No", "Edit/Delete"},
+                {"Product d", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product e", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product g", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product h", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product i", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product j", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product k", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product l", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product m", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product n", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+                {"Product o", "Category 1", "$20.00", "$25.00", "Yes", "Edit/Delete"},
+        }, columnNames);
+        
+
+        JTableHeader header = productsTable.getTableHeader();
+        header.setBackground(new Color(160, 202, 222));
+        header.setForeground(Color.BLACK);
+        header.setFont(new Font("SansSerif", Font.BOLD, 16));
+
+        productsTable.setDefaultRenderer(Object.class,  new DefaultTableCellRenderer() {
+
+    @Override
+    public Component getTableCellRendererComponent(
+            JTable table, Object value, boolean isSelected,
+            boolean hasFocus, int row, int column) {
+
+        Component c = super.getTableCellRendererComponent(
+                table, value, isSelected, hasFocus, row, column);
+
+        if (!isSelected) {
+            if (row % 2 == 0) {
+                c.setBackground(new Color(245, 245, 245)); // light
+            } else {
+                c.setBackground(new Color(230, 230, 230)); // darker
+            }
+        }
+
+        return c;
+    }
+});
+
+        JScrollPane tableScroll = new JScrollPane(productsTable);
+        tableScroll.setBounds(40, 130, screen.width - 100, screen.height - 250);
+        productsPanel.add(tableScroll);
+
+
+
+        
         return productsPanel;
     }
     
